@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Page Layout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Заголовок страницы</h1>
+</header>
+<main>
+    <div class="slider">
+        <!-- Here the slider content will be inserted -->
+    </div>
+    <footer>
+        <p>Это футер страницы</p>
+    </footer>
+</main>
+<script>
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+        .then(response => response.json())
+        .then(data => {
+            data.results.map(item => {
+                getPokemonData(item.url);
+            })
+        })
+        .catch(error => console.error(error));
+
+    const getPokemonData = (url) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                createPokemonCard(data);
+            })
+            .catch(error => console.error(error));
+    };
+
+    const createPokemonCard = (data) => {
+        let slider = document.querySelector('.slider');
+        let div = document.createElement("div");
+        div.className = "pokemon-card";
+        div.innerHTML = `
+            <img src="${data.sprites.front_default}" alt="${data.name}">
+            <p>${data.name}</p>
+        `;
+        slider.appendChild(div);
+    };
+</script>
+</body>
+</html>
